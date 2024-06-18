@@ -1,4 +1,4 @@
-# Github Workflow :: TTRENCHNATOR :robot:
+# Github Workflow :: TRENCHNATOR :robot:
 Ops for TRENCHNATOR
 This is a description of the Github workflow that will be employed in devOps of the mobile platform (Android/iOS/Web) apps.
 
