@@ -1,0 +1,6 @@
+# Ignore directories and files inside mbed-os and BUILD
+/mbed-os/
+/BUILD/
+
+# Ignore specific file types
+
