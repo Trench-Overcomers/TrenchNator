@@ -30,6 +30,11 @@ DigitalOut enable_motors(PB_ENABLE_DCMOTORS);
 DCMotor motor_M1(PB_PWM_M1, PB_ENC_A_M1, PB_ENC_B_M1, gear_ratio_M1, kn_M1, voltage_max);
 DCMotor motor_M2(PB_PWM_M2, PB_ENC_A_M2, PB_ENC_B_M2, gear_ratio_M2, kn_M2, voltage_max);
 
+/*create FastPWM object to command motor M1*/
+FastPWM pwm_M1(PB_PWM_M1); 
+/*create FastPWM object to command motor M2*/
+FastPWM pwm_M2(PB_PWM_M2); 
+
 Servo servo_D0(PB_D0);
 Servo servo_D1(PB_D1);   /*@TODO CONFIRM PIN OF SECOND SERVO ON PES BOARD*/
 
@@ -45,6 +50,7 @@ float currentPos_M2;
 uint8_t reached_90_pos = 0;
 uint8_t turned_90 = 0;
 uint8_t reached_t1_edge = 0;
+uint8_t moved_close_to_edge = 0;
 uint8_t bridge_lowered = 0;
 uint8_t reversed_t1_edge = 0;
 uint8_t crossed_bridge = 0;
@@ -58,6 +64,10 @@ uint8_t servo_D1_state  = RAISED;
 float servo_rate = 0.005f;
 float servo_input1 = 0.000f;
 float servo_input2 = 0.000f;
+
+/* Approach revs per second */
+float Approach_bridge_speed = 0.05f; 
+float Abs_revs_to_t1_edge = 0.0f;
 
 Robot_States TRENCHNATOR_STATE = BOOTING;
 int main(){
@@ -138,13 +148,38 @@ int main(){
                      /*@TODO Incorporate IR sensor too. May need to modify linear_drive function */
 
                      if(reached_t1_edge){
-                        reached_t1_edge = 0;
+                         printf("moving closer \n");
+                         Abs_revs_to_t1_edge  = ABS_REVS_T0_TABLE1_EDGE;
+                         TRENCHNATOR_STATE = GET_CLOSE_TO_TABLE_EDGE;
+                     }
+
+                    //  if(reached_t1_edge){
+                    //     reached_t1_edge = 0;
+
+                    //     servo_input1 = servo_D0_UP;
+
+                    //     TRENCHNATOR_STATE = LOWER_BRIDGE;
+                
+                    // }
+                    break;
+                }
+                case GET_CLOSE_TO_TABLE_EDGE:{
+
+                    float threshold = 30.0f;
+                    float ir_distance_cm = get_ir_distance(&ir_analog_in);
+                    printf("Distance: %f\n",ir_distance_cm);
+
+                    if(ir_distance_cm < threshold){
+                        Abs_revs_to_t1_edge = Abs_revs_to_t1_edge + Approach_bridge_speed;
+                        moved_close_to_edge = linear_drive(&motor_M1,&motor_M2,Abs_revs_to_t1_edge,FORWARD,&currentPos_M1,&currentPos_M2,REVS_TO_TURN_90,-REVS_TO_TURN_90);
+
+                    }
+                    if(ir_distance_cm > threshold){
 
                         servo_input1 = servo_D0_UP;
-
                         TRENCHNATOR_STATE = LOWER_BRIDGE;
-                
                     }
+
                     break;
                 }
                 case LOWER_BRIDGE:{

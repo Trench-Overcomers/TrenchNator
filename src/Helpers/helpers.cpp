@@ -105,113 +105,6 @@ uint8_t turn_90(DCMotor* motor_M1,DCMotor* motor_M2,float currentPos_M1,float cu
 
     return 0;
 }
-// uint8_t move_bridge(Servo* servo_D0,Servo* servo_D1,uint8_t front_or_back,uint8_t direction)
-// {
-//     if(front_or_back == FRONT)
-//     {
-//         if(direction == DOWN)
-//         {
-            
-//             if(servo_D0_DOWN > servo_D0_UP)
-//             {
-//                 float i = 0;
-//                 for(i =servo_D0_UP;i <= servo_D0_DOWN; i = i + 0.005){
-
-//                     servo_D0->setNormalisedPulseWidth(i);
-//                     ThisThread::sleep_for(20ms);
-//                 }
-                
-//             }
-//             else if(servo_D0_UP > servo_D0_DOWN)
-//             {
-//                 float i = 0;
-//                 for(i = servo_D0_UP;i>= servo_D0_DOWN;i=1-0.005){
-//                     servo_D0->setNormalisedPulseWidth(i);
-//                     ThisThread::sleep_for(20ms);
-//                 }
-//             }
-            
-//             return 1;
-//         }
-
-//         if(direction == UP)
-//         {
-//             if(servo_D0_DOWN > servo_D0_UP)
-//             {
-//                 float i = 0;
-//                 for(i =servo_D0_DOWN;i >= servo_D0_UP; i = i - 0.005){
-
-//                     servo_D0->setNormalisedPulseWidth(i);
-//                     ThisThread::sleep_for(20ms);
-//                 }
-                
-//             }
-//             else if(servo_D0_UP > servo_D0_DOWN)
-//             {
-//                 float i = 0;
-//                 for(i = servo_D0_DOWN;i<= servo_D0_UP;i=1+0.005){
-//                     servo_D0->setNormalisedPulseWidth(i);
-//                     ThisThread::sleep_for(20ms);
-//                 }
-//             }
-            
-//             return 1;
-//         }
-//     }
-
-//     if(front_or_back == BACK)
-//     {
-//        if(direction == DOWN)
-//         {
-            
-//             if(servo_D1_DOWN > servo_D1_UP)
-//             {
-//                 float i = 0;
-//                 for(i =servo_D1_UP;i <= servo_D1_DOWN; i = i + 0.005){
-
-//                     servo_D1->setNormalisedPulseWidth(i);
-//                     ThisThread::sleep_for(20ms);
-//                 }
-                
-//             }
-//             else if(servo_D1_UP > servo_D1_DOWN)
-//             {
-//                 float i = 0;
-//                 for(i = servo_D1_UP;i>= servo_D1_DOWN;i=1-0.005){
-//                     servo_D1->setNormalisedPulseWidth(i);
-//                     ThisThread::sleep_for(20ms);
-//                 }
-//             }
-            
-//             return 1;
-//         }
-
-//         if(direction == UP)
-//         {
-//             if(servo_D1_DOWN > servo_D1_UP)
-//             {
-//                 float i = 0;
-//                 for(i =servo_D1_DOWN;i >= servo_D1_UP; i = i - 0.005){
-
-//                     servo_D1->setNormalisedPulseWidth(i);
-//                     ThisThread::sleep_for(20ms);
-//                 }
-                
-//             }
-//             else if(servo_D1_UP > servo_D1_DOWN)
-//             {
-//                 float i = 0;
-//                 for(i = servo_D1_DOWN;i<= servo_D1_UP;i=1+0.005){
-//                     servo_D1->setNormalisedPulseWidth(i);
-//                     ThisThread::sleep_for(20ms);
-//                 }
-//             }
-            
-//             return 1;
-//         }
-//     }
-//     return 0;
-// }
 
 void move_bridge(Servo* servo_D0,Servo* servo_D1,uint8_t front_or_back,uint8_t direction,float servo_input)
 {
@@ -246,3 +139,19 @@ void move_bridge(Servo* servo_D0,Servo* servo_D1,uint8_t front_or_back,uint8_t d
             //return 1;
     }   
 }
+// uint8_t drive_with_ir(DCMotor* motor_M1,DCMotor* motor_M2,float ir_distance,float approach_velocity,float threshold,float M1_compensation,float M2_compensation){
+
+    
+
+//     if(ir_distance < threshold)
+//     {
+//         motor_M1->setRotation(motor_M1->getRotation()+ approach_velocity + M1_compensation);
+//         motor_M2->setRotation(motor_M2->getRotation()+ approach_velocity + M2_compensation);
+//     }
+//     else if(ir_distance >= threshold)
+//     {
+//         return 1;
+//     }
+
+//     return 0;
+// }
