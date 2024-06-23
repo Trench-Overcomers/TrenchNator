@@ -27,16 +27,24 @@ const float servo_D0_ang_max = 0.120f;
 const float servo_D1_ang_min = 0.0350f; 
 const float servo_D1_ang_max = 0.120f;
 
+const float servo_D0_UP = 0.000;
+const float servo_D0_DOWN = 0.900;
+const float servo_D1_UP = 0.900;
+const float servo_D1_DOWN = 0.000;
 
+const float RAISED = 1;
+const float LOWERED = 0;
 
 const float ABS_REVS_T0_90 = 10.0f;
 const float REVS_TO_TURN_90 = 2.0f;
 const float ABS_REVS_T0_TABLE1_EDGE = 20.0f;
 const float ABS_REVERSE_AT_TABLE1_EDGE =17.0f ;
 const float ABS_REVS_T0_TABLE2_EDGE = 25.0f;
-const float ABS_REVS_T0_CROSS_BRIDGE = 40.0f;
+const float ABS_REVS_T0_CROSS_BRIDGE = 35.0f;
 const float ABS_REVERSE_AT_TABLE2_EDGE = 30.0f;
-const float ABS_REVS_TO_CLEAR_TABLE2_EDGE = 50.0f;
+const float ABS_REVS_TO_CLEAR_TABLE2_EDGE = 40.0f;
+
+
 
 
 typedef enum{

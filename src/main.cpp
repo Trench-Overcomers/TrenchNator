@@ -52,6 +52,13 @@ uint8_t reversed_t2_edge = 0;
 uint8_t bridge_raised = 0;
 uint8_t task_finished = 0;
 
+uint8_t servo_D0_state  = RAISED;
+uint8_t servo_D1_state  = RAISED;
+
+float servo_rate = 0.005f;
+float servo_input1 = 0.000f;
+float servo_input2 = 0.000f;
+
 Robot_States TRENCHNATOR_STATE = BOOTING;
 int main(){
 
@@ -65,7 +72,7 @@ int main(){
     /* define main task period time in ms e.g. 20 ms, there for
      * the main task will run 50 times per second
     */ 
-    const int main_task_period_ms = 500;
+    const int main_task_period_ms = 50;
     /* create Timer object which we use to run the main task
      * every main_task_period_ms
     */  
@@ -77,7 +84,7 @@ int main(){
     const int loops_per_seconds = static_cast<int>(ceilf(1.0f / (0.001f * static_cast<float>(main_task_period_ms))));
 
     init_motors(&motor_M1,&motor_M2,&servo_D0,&servo_D1,speed_multiplier,
-    servo_D0_ang_min,servo_D0_ang_max,servo_D1_ang_min,servo_D1_ang_max);
+    servo_D0_ang_min,servo_D0_ang_max,servo_D1_ang_min,servo_D1_ang_max,servo_D0_UP,servo_D1_UP);
     /*setting this once would actually be enough*/
     //enable_motors = 1; 
 
@@ -132,6 +139,9 @@ int main(){
 
                      if(reached_t1_edge){
                         reached_t1_edge = 0;
+
+                        servo_input1 = servo_D0_UP;
+
                         TRENCHNATOR_STATE = LOWER_BRIDGE;
                 
                     }
@@ -139,20 +149,59 @@ int main(){
                 }
                 case LOWER_BRIDGE:{
 
-                     bridge_lowered = move_bridge(&servo_D0,&servo_D1,FRONT,DOWN);
+                    move_bridge(&servo_D0,&servo_D1,FRONT,DOWN,servo_input1);
 
-                     if(bridge_lowered){
-                         TRENCHNATOR_STATE = REVERSE_FROM_BRIDGE;
-                     }
+                    if(std::fabs(servo_input1 - servo_D0_DOWN) < 0.002f)
+                    {
+                        printf("Bridge Lowered\n");
+                        TRENCHNATOR_STATE = REVERSE_FROM_BRIDGE;
+                    }
 
+                    // if(servo_input1 == servo_D0_DOWN)
+                    // {
+                    //     printf("Bridge Lowered\n");
+                    //     TRENCHNATOR_STATE = REVERSE_FROM_BRIDGE;
+                    // }
+                     
+                    if(servo_input1 > servo_D0_DOWN){ 
+                        servo_input1 = servo_input1 - servo_rate;
+                    }
+
+                    if(servo_input1 < servo_D0_DOWN){ 
+                        servo_input1 = servo_input1 + servo_rate;
+                    }
+                    
+                    printf("servo_input: %f , servo0_DOWN: %f\n",servo_input1,servo_D0_DOWN);
+
+                    
+                    
                     break;
                 }
                 case REVERSE_FROM_BRIDGE:{
                     
+                    //printf("Reversing\n");  
+
                     reversed_t1_edge = linear_drive(&motor_M1,&motor_M2,ABS_REVERSE_AT_TABLE1_EDGE,BACKWARD,&currentPos_M1,&currentPos_M2,REVS_TO_TURN_90,-REVS_TO_TURN_90);
 
                     if(reversed_t1_edge){
-                        TRENCHNATOR_STATE = CROSS_BRIDGE;
+
+                        move_bridge(&servo_D0,&servo_D1,FRONT,UP,servo_input1);
+
+                        if(servo_input1 > servo_D0_UP){ 
+
+                            servo_input1 = servo_input1 - servo_rate;
+                        }
+
+                        if(servo_input1 < servo_D0_UP){ 
+                            servo_input1 = servo_input1 + servo_rate;
+                        }
+
+                        if(std::fabs(servo_input1 - servo_D0_UP) < 0.002f)
+                        {
+                            TRENCHNATOR_STATE = CROSS_BRIDGE;
+                        }
+                        
+                        
                     }
 
                     break;
@@ -161,6 +210,8 @@ int main(){
                     crossed_bridge = linear_drive(&motor_M1,&motor_M2,ABS_REVS_T0_CROSS_BRIDGE,FORWARD,&currentPos_M1,&currentPos_M2,REVS_TO_TURN_90,-REVS_TO_TURN_90);
 
                     if(crossed_bridge){
+
+                        servo_input2 = servo_D1_UP;
                         TRENCHNATOR_STATE = REVERSE_TO_BRIDGE;
                     }
                  
@@ -168,30 +219,53 @@ int main(){
                 }
                 case REVERSE_TO_BRIDGE:{
 
-                    reversed_t2_edge = linear_drive(&motor_M1,&motor_M2,ABS_REVERSE_AT_TABLE2_EDGE,BACKWARD,&currentPos_M1,&currentPos_M2,REVS_TO_TURN_90,-REVS_TO_TURN_90);
+                    move_bridge(&servo_D0,&servo_D1,BACK,DOWN,servo_input2);
 
-                    if(crossed_bridge){
-                        TRENCHNATOR_STATE = LIFT_BRIDGE;
+                    if(std::fabs(servo_input2 - servo_D1_DOWN) < 0.002f){
+
+                        reversed_t2_edge = linear_drive(&motor_M1,&motor_M2,ABS_REVERSE_AT_TABLE2_EDGE,BACKWARD,&currentPos_M1,&currentPos_M2,REVS_TO_TURN_90,-REVS_TO_TURN_90);
+                        
+                        if(reversed_t2_edge){
+                            TRENCHNATOR_STATE = LIFT_BRIDGE;
+                        }
                     }
 
+                    if(servo_input2 > servo_D1_DOWN){ 
+                        servo_input2 = servo_input2 - servo_rate;
+                    }
+
+                    if(servo_input2 < servo_D1_DOWN){ 
+                        servo_input2 = servo_input2 + servo_rate;
+                    }
+
+                    
 
                     break;
                 }
                 case LIFT_BRIDGE:{
 
-                    bridge_raised = move_bridge(&servo_D0,&servo_D1,BACK,UP);
+                    move_bridge(&servo_D0,&servo_D1,BACK,UP,servo_input2);
 
-                     if(bridge_raised){
-                         TRENCHNATOR_STATE = MOVE_FROM_TABLE2_EDGE;
-                     }
-                
+                    if(std::fabs(servo_input2 - servo_D1_UP) < 0.002f)
+                    {
+                        TRENCHNATOR_STATE = MOVE_FROM_TABLE2_EDGE;
+                    }
+
+                    if(servo_input2 > servo_D1_UP){ 
+                        servo_input2 = servo_input2 - servo_rate;
+                    }
+
+                    if(servo_input2 < servo_D1_UP){ 
+                        servo_input2 = servo_input2 + servo_rate;
+                    }
+        
                     break;
                 }
                 case MOVE_FROM_TABLE2_EDGE:{
 
                     task_finished = linear_drive(&motor_M1,&motor_M2,ABS_REVS_TO_CLEAR_TABLE2_EDGE,FORWARD,&currentPos_M1,&currentPos_M2,REVS_TO_TURN_90,-REVS_TO_TURN_90);
 
-                    if(crossed_bridge){
+                    if(task_finished){
                         TRENCHNATOR_STATE = SLEEP;
                     }
 
