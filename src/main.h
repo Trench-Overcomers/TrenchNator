@@ -1,19 +1,60 @@
 #ifndef MAIN_H
 #define MAIN_H
 
+#include "mbed.h"
+#include "Helpers/helpers.h"
+
+
+/*maximum voltage of battery packs, adjust this to
+ *6.0f V if you only use one battery pack
+*/ 
+const float voltage_max = 12.0f;
+
+/*gear ratio*/ 
+const float gear_ratio_M1 = 100.0f;
+const float gear_ratio_M2 = 100.0f;
+
+/*[rpm/V] */
+const float kn_M1 = 180.0f / 12.0f; 
+const float kn_M2 = 180.0f / 12.0f;  
+
+const float speed_multiplier = 0.5f;
+
+/*carefull, these values might differ from servo to servo*/
+
+const float servo_D0_ang_min = 0.0350f; 
+const float servo_D0_ang_max = 0.120f;
+const float servo_D1_ang_min = 0.0350f; 
+const float servo_D1_ang_max = 0.120f;
 
 
 
-
+const float ABS_REVS_T0_90 = 10.0f;
+const float REVS_TO_TURN_90 = 2.0f;
+const float ABS_REVS_T0_TABLE1_EDGE = 20.0f;
+const float ABS_REVERSE_AT_TABLE1_EDGE =17.0f ;
+const float ABS_REVS_T0_TABLE2_EDGE = 25.0f;
+const float ABS_REVS_T0_CROSS_BRIDGE = 40.0f;
+const float ABS_REVERSE_AT_TABLE2_EDGE = 30.0f;
+const float ABS_REVS_TO_CLEAR_TABLE2_EDGE = 50.0f;
 
 
 typedef enum{
-START_POSITION,
-
+BOOTING,
+MOVE_TO_90_POS,
+TURN_90,
+MOVE_TO_TABLE1_EDGE,
+LOWER_BRIDGE,
+REVERSE_FROM_BRIDGE,
+CROSS_BRIDGE,
+REVERSE_TO_BRIDGE,
+LIFT_BRIDGE,
+MOVE_FROM_TABLE2_EDGE,
+SLEEP
 
 }Robot_States;
 
-extern Robot_States TN_STATE = START_POSITION;
+
 
 
 
