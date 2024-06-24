@@ -2,4 +2,7 @@ mbed-os
 BUILD
 eigen
 pm2_drivers
+.mbed
+mbed_app.json
+mbed_settings.py
 
