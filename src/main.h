@@ -35,14 +35,18 @@ const float servo_D1_DOWN = 0.000;
 const float RAISED = 1;
 const float LOWERED = 0;
 
-const float ABS_REVS_T0_90 = 2.0f;
-const float REVS_TO_TURN_90 = 0.70f;
-const float ABS_REVS_T0_TABLE1_EDGE = 5.0f;
-const float ABS_REVERSE_AT_TABLE1_EDGE =3.0f ;
-const float ABS_REVS_T0_TABLE2_EDGE =8.0f;
-const float ABS_REVS_T0_CROSS_BRIDGE = 8.0f;
-const float ABS_REVERSE_AT_TABLE2_EDGE = 7.0f;
-const float ABS_REVS_TO_CLEAR_TABLE2_EDGE = 11.0f;
+const float ABS_REVS_T0_90 = 0.6f;
+const float REVS_TO_TURN_90 = 0.60f;
+const float REVERSE_REVS = 0.4;
+const float REVS_TO_CLEAR_BRIDGE_T1 = 0.4;
+const float CROSS_BRIDGE_REVS = 3.0;
+const float REVERSE_REVS_T2 = 0.8;
+const float REVS_TO_FINISH = 2.0;
+
+//const float ABS_REVS_T0_TABLE2_EDGE =8.0f;
+//const float ABS_REVS_T0_CROSS_BRIDGE = 8.0f;
+//const float ABS_REVERSE_AT_TABLE2_EDGE = 7.0f;
+//const float ABS_REVS_TO_CLEAR_TABLE2_EDGE = 11.0f;
 
 
 typedef enum{
@@ -51,6 +55,7 @@ MOVE_TO_90_POS,
 TURN_90,
 MOVE_TO_TABLE1_EDGE,
 GET_CLOSE_TO_TABLE_EDGE,
+REVERSE_TO_LOWER_BRIDGE_SAFELY,
 LOWER_BRIDGE,
 REVERSE_FROM_BRIDGE,
 CROSS_BRIDGE,
