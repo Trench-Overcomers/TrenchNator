@@ -8,12 +8,12 @@
 
 
 typedef enum{
-START_POSITION,
+BOOTING
 
 
 }Robot_States;
 
-extern Robot_States TN_STATE = START_POSITION;
+Robot_States TRENCHNATOR_STATE = BOOTING;
 
 
 
