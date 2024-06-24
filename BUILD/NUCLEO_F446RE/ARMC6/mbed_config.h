@@ -26,6 +26,7 @@
 #define LPTICKER_DELAY_TICKS                                                  1                                                                                                // set by target:MCU_STM32
 #define MBED_CONF_ALT1250_PPP_BAUDRATE                                        115200                                                                                           // set by library:ALT1250_PPP
 #define MBED_CONF_ALT1250_PPP_PROVIDE_DEFAULT                                 0                                                                                                // set by library:ALT1250_PPP
+#define MBED_CONF_APP_MAIN_STACK_SIZE                                         16384                                                                                            // set by application
 #define MBED_CONF_ATMEL_RF_ASSUME_SPACED_SPI                                  1                                                                                                // set by library:atmel-rf[STM]
 #define MBED_CONF_ATMEL_RF_FULL_SPI_SPEED                                     7500000                                                                                          // set by library:atmel-rf
 #define MBED_CONF_ATMEL_RF_FULL_SPI_SPEED_BYTE_SPACING                        250                                                                                              // set by library:atmel-rf
@@ -278,7 +279,7 @@
 #define MBED_CONF_PLATFORM_MINIMAL_PRINTF_ENABLE_FLOATING_POINT               0                                                                                                // set by library:platform
 #define MBED_CONF_PLATFORM_MINIMAL_PRINTF_SET_FLOATING_POINT_MAX_DECIMALS     6                                                                                                // set by library:platform
 #define MBED_CONF_PLATFORM_POLL_USE_LOWPOWER_TIMER                            0                                                                                                // set by library:platform
-#define MBED_CONF_PLATFORM_STDIO_BAUD_RATE                                    9600                                                                                             // set by library:platform
+#define MBED_CONF_PLATFORM_STDIO_BAUD_RATE                                    115200                                                                                           // set by application[*]
 #define MBED_CONF_PLATFORM_STDIO_BUFFERED_SERIAL                              0                                                                                                // set by library:platform
 #define MBED_CONF_PLATFORM_STDIO_CONVERT_NEWLINES                             1                                                                                                // set by library:platform
 #define MBED_CONF_PLATFORM_STDIO_CONVERT_TTY_NEWLINES                         1                                                                                                // set by library:platform
@@ -324,6 +325,17 @@
 #define MBED_CONF_S2LP_PROVIDE_DEFAULT                                        0                                                                                                // set by library:s2lp
 #define MBED_CONF_SARA4_PPP_BAUDRATE                                          115200                                                                                           // set by library:SARA4_PPP
 #define MBED_CONF_SARA4_PPP_PROVIDE_DEFAULT                                   0                                                                                                // set by library:SARA4_PPP
+#define MBED_CONF_SD_CMD0_IDLE_STATE_RETRIES                                  5                                                                                                // set by library:sd
+#define MBED_CONF_SD_CMD_TIMEOUT                                              10000                                                                                            // set by library:sd
+#define MBED_CONF_SD_CRC_ENABLED                                              0                                                                                                // set by library:sd
+#define MBED_CONF_SD_FSFAT_SDCARD_INSTALLED                                   1                                                                                                // set by library:sd
+#define MBED_CONF_SD_INIT_FREQUENCY                                           100000                                                                                           // set by library:sd
+#define MBED_CONF_SD_SPI_CLK                                                  ARDUINO_UNO_SPI_SCK                                                                              // set by library:sd
+#define MBED_CONF_SD_SPI_CS                                                   ARDUINO_UNO_SPI_CS                                                                               // set by library:sd
+#define MBED_CONF_SD_SPI_MISO                                                 ARDUINO_UNO_SPI_MISO                                                                             // set by library:sd
+#define MBED_CONF_SD_SPI_MOSI                                                 ARDUINO_UNO_SPI_MOSI                                                                             // set by library:sd
+#define MBED_CONF_SD_TEST_BUFFER                                              8192                                                                                             // set by library:sd
+#define MBED_CONF_SD_TRX_FREQUENCY                                            1000000                                                                                          // set by library:sd
 #define MBED_CONF_STM32_EMAC_ETH_PHY_ADDRESS                                  0                                                                                                // set by library:stm32-emac
 #define MBED_CONF_STM32_EMAC_ETH_PHY_AUTONEGOTIATION                          ETH_AUTONEGOTIATION_ENABLE                                                                       // set by library:stm32-emac
 #define MBED_CONF_STM32_EMAC_ETH_PHY_DUPLEXMODE                               ETH_MODE_FULLDUPLEX                                                                              // set by library:stm32-emac
