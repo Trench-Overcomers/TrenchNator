@@ -1,4 +1,5 @@
 #include "main.h"
+#include <cstdio>
 
 /*
  *this variable will be toggled via the user button (blue button) and
@@ -51,6 +52,7 @@ uint8_t reached_90_pos = 0;
 uint8_t turned_90 = 0;
 uint8_t reached_t1_edge = 0;
 uint8_t moved_close_to_edge = 0;
+uint8_t  reversed_to_safe = 0;
 uint8_t bridge_lowered = 0;
 uint8_t reversed_t1_edge = 0;
 uint8_t crossed_bridge = 0;
@@ -68,6 +70,13 @@ float servo_input2 = 0.000f;
 /* Approach revs per second */
 float Approach_bridge_speed = 0.05f; 
 float Abs_revs_to_t1_edge = 0.0f;
+
+
+float ABS_REVERSE_AT_TABLE1_EDGE =0.0f ;
+float ABS_REVS_T0_CROSS_BRIDGE = 0.0f;
+float ABS_REVERSE_AT_TABLE2_EDGE = 0.0f;
+float ABS_REVS_TO_CLEAR_TABLE2_EDGE = 0.0f;
+float REVERSE_TO_CLEAR_BRIDGE = 0.0f;
 
 Robot_States TRENCHNATOR_STATE = BOOTING;
 int main(){
@@ -97,6 +106,9 @@ int main(){
     servo_D0_ang_min,servo_D0_ang_max,servo_D1_ang_min,servo_D1_ang_max,servo_D0_UP,servo_D1_UP);
     /*setting this once would actually be enough*/
     //enable_motors = 1; 
+
+
+    
 
     while(true){
 
@@ -134,35 +146,14 @@ int main(){
                     if(turned_90){
                         
                         turned_90 = 0;
-                        TRENCHNATOR_STATE = MOVE_TO_TABLE1_EDGE;
+                        Abs_revs_to_t1_edge = currentPos_M1 +REVS_TO_TURN_90;
+                        TRENCHNATOR_STATE = GET_CLOSE_TO_TABLE_EDGE;
 
                     }
 
                     break;
                 }
-                case MOVE_TO_TABLE1_EDGE:{
-                      
-                     //printf("MOVE TO TABLE 1 EDGE\n");
-                     reached_t1_edge = linear_drive(&motor_M1,&motor_M2,ABS_REVS_T0_TABLE1_EDGE,FORWARD,&currentPos_M1,&currentPos_M2,REVS_TO_TURN_90,-REVS_TO_TURN_90);
-
-                     /*@TODO Incorporate IR sensor too. May need to modify linear_drive function */
-
-                     if(reached_t1_edge){
-                         printf("moving closer \n");
-                         Abs_revs_to_t1_edge  = ABS_REVS_T0_TABLE1_EDGE;
-                         TRENCHNATOR_STATE = GET_CLOSE_TO_TABLE_EDGE;
-                     }
-
-                    //  if(reached_t1_edge){
-                    //     reached_t1_edge = 0;
-
-                    //     servo_input1 = servo_D0_UP;
-
-                    //     TRENCHNATOR_STATE = LOWER_BRIDGE;
                 
-                    // }
-                    break;
-                }
                 case GET_CLOSE_TO_TABLE_EDGE:{
 
                     float threshold = 15.0f;
@@ -177,10 +168,23 @@ int main(){
                     if(ir_distance_cm > threshold){
 
                         servo_input1 = servo_D0_UP;
-                        TRENCHNATOR_STATE = LOWER_BRIDGE;
+                        printf("Pos_at tabl1 edge: %f\n",Abs_revs_to_t1_edge );
+                        TRENCHNATOR_STATE = REVERSE_TO_LOWER_BRIDGE_SAFELY;
                     }
 
                     break;
+                }
+                case REVERSE_TO_LOWER_BRIDGE_SAFELY:{
+
+                    ABS_REVERSE_AT_TABLE1_EDGE = Abs_revs_to_t1_edge - REVERSE_REVS;
+
+                    printf("Reverse pos tabl1 edge: %f\n",  ABS_REVERSE_AT_TABLE1_EDGE);
+                    reversed_to_safe = linear_drive(&motor_M1,&motor_M2,ABS_REVERSE_AT_TABLE1_EDGE,BACKWARD,&currentPos_M1,&currentPos_M2,REVS_TO_TURN_90,-REVS_TO_TURN_90);
+
+                    if(reversed_to_safe){
+                        TRENCHNATOR_STATE = LOWER_BRIDGE;
+                    }
+                    
                 }
                 case LOWER_BRIDGE:{
 
@@ -216,7 +220,8 @@ int main(){
                     
                     //printf("Reversing\n");  
 
-                    reversed_t1_edge = linear_drive(&motor_M1,&motor_M2,ABS_REVERSE_AT_TABLE1_EDGE,BACKWARD,&currentPos_M1,&currentPos_M2,REVS_TO_TURN_90,-REVS_TO_TURN_90);
+                    REVERSE_TO_CLEAR_BRIDGE =  ABS_REVERSE_AT_TABLE1_EDGE - REVS_TO_CLEAR_BRIDGE_T1 ;
+                    reversed_t1_edge = linear_drive(&motor_M1,&motor_M2, REVERSE_TO_CLEAR_BRIDGE,BACKWARD,&currentPos_M1,&currentPos_M2,REVS_TO_TURN_90,-REVS_TO_TURN_90);
 
                     if(reversed_t1_edge){
 
@@ -242,6 +247,8 @@ int main(){
                     break;
                 }
                 case CROSS_BRIDGE:{
+
+                    ABS_REVS_T0_CROSS_BRIDGE = currentPos_M1 + CROSS_BRIDGE_REVS;
                     crossed_bridge = linear_drive(&motor_M1,&motor_M2,ABS_REVS_T0_CROSS_BRIDGE,FORWARD,&currentPos_M1,&currentPos_M2,REVS_TO_TURN_90,-REVS_TO_TURN_90);
 
                     if(crossed_bridge){
@@ -258,6 +265,7 @@ int main(){
 
                     if(std::fabs(servo_input2 - servo_D1_DOWN) < 0.002f){
 
+                        ABS_REVERSE_AT_TABLE2_EDGE = ABS_REVS_T0_CROSS_BRIDGE - REVERSE_REVS_T2;
                         reversed_t2_edge = linear_drive(&motor_M1,&motor_M2,ABS_REVERSE_AT_TABLE2_EDGE,BACKWARD,&currentPos_M1,&currentPos_M2,REVS_TO_TURN_90,-REVS_TO_TURN_90);
                         
                         if(reversed_t2_edge){
@@ -297,7 +305,8 @@ int main(){
                     break;
                 }
                 case MOVE_FROM_TABLE2_EDGE:{
-
+                    
+                    ABS_REVS_TO_CLEAR_TABLE2_EDGE = ABS_REVERSE_AT_TABLE2_EDGE + REVS_TO_FINISH;
                     task_finished = linear_drive(&motor_M1,&motor_M2,ABS_REVS_TO_CLEAR_TABLE2_EDGE,FORWARD,&currentPos_M1,&currentPos_M2,REVS_TO_TURN_90,-REVS_TO_TURN_90);
 
                     if(task_finished){
