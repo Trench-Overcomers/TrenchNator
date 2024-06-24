@@ -165,7 +165,7 @@ int main(){
                 }
                 case GET_CLOSE_TO_TABLE_EDGE:{
 
-                    float threshold = 30.0f;
+                    float threshold = 15.0f;
                     float ir_distance_cm = get_ir_distance(&ir_analog_in);
                     printf("Distance: %f\n",ir_distance_cm);
 
