@@ -145,7 +145,7 @@ void move_bridge(Servo* servo_D0,Servo* servo_D1,uint8_t front_or_back,uint8_t d
 
 //     if(ir_distance < threshold)
 //     {
-//         motor_M1->setRotation(motor_M1->getRotation()+ approach_velocity + M1_compensation);
+//         motor_M1->setRotation(motor_M1- >getRotation()+ approach_velocity + M1_compensation);
 //         motor_M2->setRotation(motor_M2->getRotation()+ approach_velocity + M2_compensation);
 //     }
 //     else if(ir_distance >= threshold)
