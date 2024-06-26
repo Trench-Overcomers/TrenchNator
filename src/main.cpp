@@ -68,7 +68,7 @@ float servo_input1 = 0.000f;
 float servo_input2 = 0.000f;
 
 /* Approach revs per second */
-float Approach_bridge_speed = 0.05f; 
+float Approach_bridge_speed = 0.025f; 
 float Abs_revs_to_t1_edge = 0.0f;
 
 
@@ -193,6 +193,7 @@ int main(){
                     if(std::fabs(servo_input1 - servo_D0_DOWN) < 0.002f)
                     {
                         printf("Bridge Lowered\n");
+                        //move_bridge(&servo_D0,&servo_D1,FRONT,DOWN,servo_input1+0.1); //added 0.1 
                         TRENCHNATOR_STATE = REVERSE_FROM_BRIDGE;
                     }
 
