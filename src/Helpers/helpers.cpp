@@ -61,8 +61,11 @@ float get_ir_distance(AnalogIn* ir_analog_in)
     return ir_distance_cm;  
 }
 
-uint8_t linear_drive(DCMotor* motor_M1,DCMotor* motor_M2,float Abs_position_in_revs,float direction,float* currentPos_M1,float* currentPos_M2,float M1_compensation,float M2_compensation)
+uint8_t linear_drive(DCMotor* motor_M1,DCMotor* motor_M2,float Abs_position_in_revs,float direction,float* currentPos_M1,float* currentPos_M2,float M1_compensation,float M2_compensation,float speed)
 {
+
+    motor_M1->setMaxVelocity(motor_M1->getMaxPhysicalVelocity() * speed);
+    motor_M2->setMaxVelocity(motor_M2->getMaxPhysicalVelocity() * speed);
 
     motor_M1->setRotation(Abs_position_in_revs + M1_compensation);
     motor_M2->setRotation(Abs_position_in_revs + M2_compensation);
@@ -70,7 +73,7 @@ uint8_t linear_drive(DCMotor* motor_M1,DCMotor* motor_M2,float Abs_position_in_r
     if(direction == FORWARD)
     {
         
-        if((motor_M1->getRotation() >= (Abs_position_in_revs+M1_compensation)) && (motor_M2->getRotation() >= (Abs_position_in_revs+M2_compensation))){
+        if(std::fabs(motor_M1->getRotation() - (Abs_position_in_revs+M1_compensation))<limit && std::fabs(motor_M2->getRotation() - (Abs_position_in_revs+M2_compensation))<limit){
             
             *currentPos_M1 = motor_M1->getRotation();
             *currentPos_M2 = motor_M2->getRotation();
@@ -81,7 +84,7 @@ uint8_t linear_drive(DCMotor* motor_M1,DCMotor* motor_M2,float Abs_position_in_r
     else if(direction == BACKWARD)
     {
        
-        if((motor_M1->getRotation() <= (Abs_position_in_revs+M1_compensation)) && (motor_M2->getRotation() <= (Abs_position_in_revs+M2_compensation))){
+        if(std::fabs(motor_M1->getRotation() - (Abs_position_in_revs+M1_compensation))<limit && (motor_M2->getRotation() - (Abs_position_in_revs+M2_compensation))<limit){
             
             *currentPos_M1 = motor_M1->getRotation();
             *currentPos_M2 = motor_M2->getRotation();
@@ -98,7 +101,7 @@ uint8_t turn_90(DCMotor* motor_M1,DCMotor* motor_M2,float currentPos_M1,float cu
     motor_M1->setRotation(currentPos_M1 + revs_to_turn_90);
     motor_M2->setRotation(currentPos_M2 - revs_to_turn_90);
 
-    if((motor_M1->getRotation()>=(currentPos_M1 + revs_to_turn_90)) && (motor_M2->getRotation()<=(currentPos_M2 - revs_to_turn_90))){
+    if(std::fabs(motor_M1->getRotation()-(currentPos_M1 + revs_to_turn_90))<limit && std::fabs(motor_M2->getRotation()-(currentPos_M2 - revs_to_turn_90))<limit){
 
         return 1;
     }
@@ -139,19 +142,3 @@ void move_bridge(Servo* servo_D0,Servo* servo_D1,uint8_t front_or_back,uint8_t d
             //return 1;
     }   
 }
-// uint8_t drive_with_ir(DCMotor* motor_M1,DCMotor* motor_M2,float ir_distance,float approach_velocity,float threshold,float M1_compensation,float M2_compensation){
-
-    
-
-//     if(ir_distance < threshold)
-//     {
-//         motor_M1->setRotation(motor_M1- >getRotation()+ approach_velocity + M1_compensation);
-//         motor_M2->setRotation(motor_M2->getRotation()+ approach_velocity + M2_compensation);
-//     }
-//     else if(ir_distance >= threshold)
-//     {
-//         return 1;
-//     }
-
-//     return 0;
-// }

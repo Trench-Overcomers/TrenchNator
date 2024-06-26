@@ -130,7 +130,7 @@ int main(){
                 case MOVE_TO_90_POS:{
 
                     printf("MOVE_TO_90\n");
-                    reached_90_pos = linear_drive(&motor_M1,&motor_M2,ABS_REVS_T0_90,FORWARD,&currentPos_M1,&currentPos_M2,0.0f,0.0f);
+                    reached_90_pos = linear_drive(&motor_M1,&motor_M2,ABS_REVS_T0_90,FORWARD,&currentPos_M1,&currentPos_M2,0.0f,0.0f,0.5f);
                     
                     if(reached_90_pos){
                         reached_90_pos = 0;
@@ -162,7 +162,7 @@ int main(){
 
                     if(ir_distance_cm < threshold){
                         Abs_revs_to_t1_edge = Abs_revs_to_t1_edge + Approach_bridge_speed;
-                        moved_close_to_edge = linear_drive(&motor_M1,&motor_M2,Abs_revs_to_t1_edge,FORWARD,&currentPos_M1,&currentPos_M2,REVS_TO_TURN_90,-REVS_TO_TURN_90);
+                        moved_close_to_edge = linear_drive(&motor_M1,&motor_M2,Abs_revs_to_t1_edge,FORWARD,&currentPos_M1,&currentPos_M2,REVS_TO_TURN_90,-REVS_TO_TURN_90,0.5f);
 
                     }
                     if(ir_distance_cm > threshold){
@@ -179,7 +179,7 @@ int main(){
                     ABS_REVERSE_AT_TABLE1_EDGE = Abs_revs_to_t1_edge - REVERSE_REVS;
 
                     printf("Reverse pos tabl1 edge: %f\n",  ABS_REVERSE_AT_TABLE1_EDGE);
-                    reversed_to_safe = linear_drive(&motor_M1,&motor_M2,ABS_REVERSE_AT_TABLE1_EDGE,BACKWARD,&currentPos_M1,&currentPos_M2,REVS_TO_TURN_90,-REVS_TO_TURN_90);
+                    reversed_to_safe = linear_drive(&motor_M1,&motor_M2,ABS_REVERSE_AT_TABLE1_EDGE,BACKWARD,&currentPos_M1,&currentPos_M2,REVS_TO_TURN_90,-REVS_TO_TURN_90,0.5f);
 
                     if(reversed_to_safe){
                         TRENCHNATOR_STATE = LOWER_BRIDGE;
@@ -221,7 +221,7 @@ int main(){
                     //printf("Reversing\n");  
 
                     REVERSE_TO_CLEAR_BRIDGE =  ABS_REVERSE_AT_TABLE1_EDGE - REVS_TO_CLEAR_BRIDGE_T1 ;
-                    reversed_t1_edge = linear_drive(&motor_M1,&motor_M2, REVERSE_TO_CLEAR_BRIDGE,BACKWARD,&currentPos_M1,&currentPos_M2,REVS_TO_TURN_90,-REVS_TO_TURN_90);
+                    reversed_t1_edge = linear_drive(&motor_M1,&motor_M2, REVERSE_TO_CLEAR_BRIDGE,BACKWARD,&currentPos_M1,&currentPos_M2,REVS_TO_TURN_90,-REVS_TO_TURN_90,0.25f);
 
                     if(reversed_t1_edge){
 
@@ -249,7 +249,7 @@ int main(){
                 case CROSS_BRIDGE:{
 
                     ABS_REVS_T0_CROSS_BRIDGE = currentPos_M1 + CROSS_BRIDGE_REVS;
-                    crossed_bridge = linear_drive(&motor_M1,&motor_M2,ABS_REVS_T0_CROSS_BRIDGE,FORWARD,&currentPos_M1,&currentPos_M2,REVS_TO_TURN_90,-REVS_TO_TURN_90);
+                    crossed_bridge = linear_drive(&motor_M1,&motor_M2,ABS_REVS_T0_CROSS_BRIDGE,FORWARD,&currentPos_M1,&currentPos_M2,REVS_TO_TURN_90,-REVS_TO_TURN_90,0.3f);
 
                     if(crossed_bridge){
 
@@ -266,7 +266,7 @@ int main(){
                     if(std::fabs(servo_input2 - servo_D1_DOWN) < 0.002f){
 
                         ABS_REVERSE_AT_TABLE2_EDGE = ABS_REVS_T0_CROSS_BRIDGE - REVERSE_REVS_T2;
-                        reversed_t2_edge = linear_drive(&motor_M1,&motor_M2,ABS_REVERSE_AT_TABLE2_EDGE,BACKWARD,&currentPos_M1,&currentPos_M2,REVS_TO_TURN_90,-REVS_TO_TURN_90);
+                        reversed_t2_edge = linear_drive(&motor_M1,&motor_M2,ABS_REVERSE_AT_TABLE2_EDGE,BACKWARD,&currentPos_M1,&currentPos_M2,REVS_TO_TURN_90,-REVS_TO_TURN_90,0.20f);
                         
                         if(reversed_t2_edge){
                             TRENCHNATOR_STATE = LIFT_BRIDGE;
@@ -307,7 +307,7 @@ int main(){
                 case MOVE_FROM_TABLE2_EDGE:{
                     
                     ABS_REVS_TO_CLEAR_TABLE2_EDGE = ABS_REVERSE_AT_TABLE2_EDGE + REVS_TO_FINISH;
-                    task_finished = linear_drive(&motor_M1,&motor_M2,ABS_REVS_TO_CLEAR_TABLE2_EDGE,FORWARD,&currentPos_M1,&currentPos_M2,REVS_TO_TURN_90,-REVS_TO_TURN_90);
+                    task_finished = linear_drive(&motor_M1,&motor_M2,ABS_REVS_TO_CLEAR_TABLE2_EDGE,FORWARD,&currentPos_M1,&currentPos_M2,REVS_TO_TURN_90,-REVS_TO_TURN_90,0.5f);
 
                     if(task_finished){
                         TRENCHNATOR_STATE = SLEEP;
