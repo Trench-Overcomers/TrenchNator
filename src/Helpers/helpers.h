@@ -34,7 +34,7 @@ const float servo_D1_ang_min,const float servo_D1_ang_max,float servo_D0_UP,floa
 float get_ir_distance(AnalogIn* ir_analog_in);
 
 uint8_t linear_drive(DCMotor* motor_M1,DCMotor* motor_M2,float Abs_position_in_revs,float direction,float* currentPos_M1,float* currentPos_M2,float M1_compensation,float M2_compensation,float speed);
-uint8_t turn_90(DCMotor* motor_M1,DCMotor* motor_M2,float currentPos_M1,float currentPos_M2, float revs_to_turn_90);
+uint8_t turn(DCMotor* motor_M1,DCMotor* motor_M2,float currentPos_M1,float currentPos_M2, float revs_to_turn,float M1_compensation,float M2_compensation);
 //uint8_t move_bridge(Servo* servo_D0,Servo* servo_D1,uint8_t front_or_back,uint8_t direction);
 void move_bridge(Servo* servo_D0,Servo* servo_D1,uint8_t front_or_back,uint8_t direction,float servo_input);
 //uint8_t drive_with_ir(DCMotor* motor_M1,DCMotor* motor_M2,float ir_distance,float approach_velocity,float threshold,float M1_compensation,float M2_compensation);

@@ -39,9 +39,12 @@ const float ABS_REVS_T0_90 = 0.6f;
 const float REVS_TO_TURN_90 = 0.55f;
 const float REVERSE_REVS = 0.2;
 const float REVS_TO_CLEAR_BRIDGE_T1 = 1.2;
-const float CROSS_BRIDGE_REVS = 3.0;
+const float CROSS_BRIDGE_REVS = 3.8;
 const float REVERSE_REVS_T2 = 0.8;
 const float REVS_TO_FINISH = 2.0;
+
+const float REVS_TO_TURN_180 = 1.15f;
+const float REVS_TO_PICK_BRIDGE = 0.2f;
 
 //const float ABS_REVS_T0_TABLE2_EDGE =8.0f;
 //const float ABS_REVS_T0_CROSS_BRIDGE = 8.0f;
@@ -62,7 +65,13 @@ CROSS_BRIDGE,
 REVERSE_TO_BRIDGE,
 LIFT_BRIDGE,
 MOVE_FROM_TABLE2_EDGE,
-SLEEP
+SLEEP,
+ROTATE_180,
+LOWER_FRONT_FORK,
+DRIVE_INTO_BRIDGE,
+LIFT_BRIDGE_FRONT,
+REVERSE_TO_FINISH
+
 
 }Robot_States;
 

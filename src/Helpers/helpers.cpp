@@ -96,12 +96,12 @@ uint8_t linear_drive(DCMotor* motor_M1,DCMotor* motor_M2,float Abs_position_in_r
 
     return 0;
 }
-uint8_t turn_90(DCMotor* motor_M1,DCMotor* motor_M2,float currentPos_M1,float currentPos_M2, float revs_to_turn_90)
+uint8_t turn(DCMotor* motor_M1,DCMotor* motor_M2,float currentPos_M1,float currentPos_M2, float revs_to_turn,float M1_compensation,float M2_compensation)
 {
-    motor_M1->setRotation(currentPos_M1 + revs_to_turn_90);
-    motor_M2->setRotation(currentPos_M2 - revs_to_turn_90);
+    motor_M1->setRotation(currentPos_M1 + revs_to_turn + M1_compensation);
+    motor_M2->setRotation(currentPos_M2 - revs_to_turn + M2_compensation);
 
-    if(std::fabs(motor_M1->getRotation()-(currentPos_M1 + revs_to_turn_90))<limit && std::fabs(motor_M2->getRotation()-(currentPos_M2 - revs_to_turn_90))<limit){
+    if(std::fabs(motor_M1->getRotation()-(currentPos_M1 + revs_to_turn))<limit && std::fabs(motor_M2->getRotation()-(currentPos_M2 - revs_to_turn))<limit){
 
         return 1;
     }
