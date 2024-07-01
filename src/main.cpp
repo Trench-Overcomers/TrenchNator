@@ -313,15 +313,15 @@ int main(){
                 case LOWER_FRONT_FORK:{
                     move_bridge(&servo_D0,&servo_D1,FRONT,DOWN,servo_input1);
 
-                    if(servo_input1 > (servo_D0_DOWN+ 0.02)){                            //0.2 instead of 0.1
+                    if(servo_input1 > (servo_D1_DOWN+ 0.0)){                            //0.2 instead of 0.1
                         servo_input1 = servo_input1 - servo_rate;
                     }
 
-                    if(servo_input1 < (servo_D0_DOWN+0.02)){ 
+                    if(servo_input1 < (servo_D1_DOWN+0.0)){ 
                         servo_input1 = servo_input1 + servo_rate;
                     }
 
-                    if(std::fabs(servo_input1 - (servo_D0_DOWN+0.02)) < 0.005f){
+                    if(std::fabs(servo_input1 - (servo_D1_DOWN+0.0)) < 0.005f){
                         //TRENCHNATOR_STATE = CROSS_BRIDGE;
                         TRENCHNATOR_STATE = DRIVE_INTO_BRIDGE;
                         //fork1_raised = 1;
@@ -337,11 +337,13 @@ int main(){
                     
                     if(driven_into_bridge)
                     {
+                        linear_drive(&motor_M1,&motor_M2,ABS_REVS_T0_DRIVE_TO_BRIDGE-0.2,BACKWARD,&currentPos_M1,&currentPos_M2,(REVS_TO_TURN_90+REVS_TO_TURN_180),-(REVS_TO_TURN_90+REVS_TO_TURN_180),0.3f);
                         TRENCHNATOR_STATE = LIFT_BRIDGE_FRONT;
                     }
                     break;
                 }
                 case LIFT_BRIDGE_FRONT:{
+
 
                     move_bridge(&servo_D0,&servo_D1,FRONT,UP,servo_input1);
 
@@ -365,7 +367,7 @@ int main(){
 
                 case REVERSE_TO_FINISH:
                 {
-                    ABS_REVS_T0_REVERSE_TO_FINISH = ABS_REVS_T0_DRIVE_TO_BRIDGE - REVS_TO_FINISH;
+                    ABS_REVS_T0_REVERSE_TO_FINISH = ABS_REVS_T0_DRIVE_TO_BRIDGE - REVS_TO_FINISH - 0.2;
                     reverse_to_finish = linear_drive(&motor_M1,&motor_M2,ABS_REVS_T0_REVERSE_TO_FINISH,FORWARD,&currentPos_M1,&currentPos_M2,(REVS_TO_TURN_90+REVS_TO_TURN_180),-(REVS_TO_TURN_90+REVS_TO_TURN_180),0.3f);
 
                     if(reverse_to_finish){
