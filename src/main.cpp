@@ -337,7 +337,7 @@ int main(){
                     
                     if(driven_into_bridge)
                     {
-                        linear_drive(&motor_M1,&motor_M2,ABS_REVS_T0_DRIVE_TO_BRIDGE-0.2,BACKWARD,&currentPos_M1,&currentPos_M2,(REVS_TO_TURN_90+REVS_TO_TURN_180),-(REVS_TO_TURN_90+REVS_TO_TURN_180),0.3f);
+                        linear_drive(&motor_M1,&motor_M2,ABS_REVS_T0_DRIVE_TO_BRIDGE-0.1,BACKWARD,&currentPos_M1,&currentPos_M2,(REVS_TO_TURN_90+REVS_TO_TURN_180),-(REVS_TO_TURN_90+REVS_TO_TURN_180),0.3f);
                         TRENCHNATOR_STATE = LIFT_BRIDGE_FRONT;
                     }
                     break;
@@ -367,7 +367,7 @@ int main(){
 
                 case REVERSE_TO_FINISH:
                 {
-                    ABS_REVS_T0_REVERSE_TO_FINISH = ABS_REVS_T0_DRIVE_TO_BRIDGE - REVS_TO_FINISH - 0.2;
+                    ABS_REVS_T0_REVERSE_TO_FINISH = ABS_REVS_T0_DRIVE_TO_BRIDGE - REVS_TO_FINISH - 0.1;
                     reverse_to_finish = linear_drive(&motor_M1,&motor_M2,ABS_REVS_T0_REVERSE_TO_FINISH,FORWARD,&currentPos_M1,&currentPos_M2,(REVS_TO_TURN_90+REVS_TO_TURN_180),-(REVS_TO_TURN_90+REVS_TO_TURN_180),0.3f);
 
                     if(reverse_to_finish){

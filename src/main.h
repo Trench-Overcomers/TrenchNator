@@ -34,7 +34,7 @@ const float servo_D0_ang_max = 0.120f;
 const float servo_D0_UP = 0.90;   // works fine
 const float servo_D0_DOWN = 0.12;  // works fine.
 const float servo_D1_UP = 0.900;
-const float servo_D1_DOWN = 0.10;
+const float servo_D1_DOWN = 0.095;
 
 const float RAISED = 1;
 const float LOWERED = 0;
